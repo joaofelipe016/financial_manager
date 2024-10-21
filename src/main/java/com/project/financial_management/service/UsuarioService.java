@@ -7,6 +7,7 @@ import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,10 +18,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository roleRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UsuarioDTO create(UsuarioDTO usuarioDTO) {
@@ -34,7 +37,7 @@ public class UsuarioService {
         var basicRole = this.roleRepository.findByNmRole(Roles.BASIC.name());
         Usuario usuario = new Usuario();
         usuario.setScUsuario(usuarioDTO.scUsuario());
-        usuario.setScSenha(usuarioDTO.scSenha());
+        usuario.setScSenha(passwordEncoder.encode(usuarioDTO.scSenha()));
         usuario.setPessoa(pessoa);
         usuario.setRole(Set.of(basicRole));
         return usuario;
