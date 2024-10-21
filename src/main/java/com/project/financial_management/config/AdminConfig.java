@@ -7,6 +7,7 @@ import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
@@ -16,10 +17,12 @@ public class AdminConfig implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public AdminConfig(RoleRepository roleRepository, UsuarioRepository usuarioRepository) {
+    public AdminConfig(RoleRepository roleRepository, UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,13 +44,12 @@ public class AdminConfig implements CommandLineRunner {
 
                 var usuario = new Usuario();
                 usuario.setScUsuario("admin");
-                usuario.setScSenha("cto14porta7");
+                usuario.setScSenha(passwordEncoder.encode("cto14porta7"));
                 usuario.setRole(Set.of(roleAdmin));
                 usuario.setPessoa(pessoa);
 
                 this.usuarioRepository.save(usuario);
             }
         );
-
     }
 }
