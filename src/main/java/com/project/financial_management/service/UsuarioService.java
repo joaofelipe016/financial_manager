@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -50,4 +51,21 @@ public class UsuarioService {
         return pessoa;
     }
 
+    public UsuarioDTO update(UUID idUsuario, UsuarioDTO usuarioDTO) {
+        Optional<Usuario> usuarioOptional = this.usuarioRepository.findById(idUsuario);
+        if(usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            Usuario usuarioAtualizado = this.mapperUsuario(usuario, usuarioDTO);
+            this.usuarioRepository.save(usuarioAtualizado);
+        }
+        return usuarioDTO;
+    }
+
+    private Usuario mapperUsuario(Usuario usuario, UsuarioDTO usuarioDTO) {
+        usuario.setScUsuario(usuarioDTO.scUsuario());
+        usuario.setScSenha(usuario.getScUsuario());
+        usuario.getPessoa().setNmPessoa(usuarioDTO.pessoa().getNmPessoa());
+        usuario.getPessoa().setNrCpf(usuarioDTO.pessoa().getNrCpf());
+        return usuario;
+    }
 }
