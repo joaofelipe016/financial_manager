@@ -55,15 +55,15 @@ public class UsuarioService {
         Optional<Usuario> usuarioOptional = this.usuarioRepository.findById(idUsuario);
         if(usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            Usuario usuarioAtualizado = this.mapperUsuario(usuario, usuarioDTO);
+            Usuario usuarioAtualizado = this.populateUsuario(usuario, usuarioDTO);
             this.usuarioRepository.save(usuarioAtualizado);
         }
         return usuarioDTO;
     }
 
-    private Usuario mapperUsuario(Usuario usuario, UsuarioDTO usuarioDTO) {
+    private Usuario populateUsuario(Usuario usuario, UsuarioDTO usuarioDTO) {
         usuario.setScUsuario(usuarioDTO.scUsuario());
-        usuario.setScSenha(usuario.getScUsuario());
+        usuario.setScSenha(usuario.getScSenha());
         usuario.getPessoa().setNmPessoa(usuarioDTO.pessoa().getNmPessoa());
         usuario.getPessoa().setNrCpf(usuarioDTO.pessoa().getNrCpf());
         return usuario;

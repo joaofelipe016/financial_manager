@@ -30,7 +30,7 @@ public class UsuarioController {
     @Transactional
     @PutMapping(path = "/{idUsuario}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<UsuarioDTO> update(@RequestParam UUID idUsuario, @RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> update(@PathVariable UUID idUsuario, @RequestBody UsuarioDTO usuarioDTO) {
         var usuario = this.usuarioService.update(idUsuario, usuarioDTO);
         return ResponseEntity.ok(usuario);
     }
