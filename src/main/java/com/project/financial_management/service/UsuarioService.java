@@ -7,6 +7,7 @@ import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,20 +53,22 @@ public class UsuarioService {
     }
 
     public UsuarioDTO update(UUID idUsuario, UsuarioDTO usuarioDTO) {
-        Optional<Usuario> usuarioOptional = this.usuarioRepository.findById(idUsuario);
-        if(usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
-            Usuario usuarioAtualizado = this.populateUsuario(usuario, usuarioDTO);
-            this.usuarioRepository.save(usuarioAtualizado);
-        }
-        return usuarioDTO;
+        return this.usuarioRepository.findById(idUsuario)
+            .map(usuario -> {
+                Usuario usuarioAtualizado = populateUsuario(usuario, usuarioDTO);
+                this.usuarioRepository.save(usuarioAtualizado);
+                return usuarioDTO;
+            }).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
 
     private Usuario populateUsuario(Usuario usuario, UsuarioDTO usuarioDTO) {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNmPessoa(usuarioDTO.pessoa().getNmPessoa());
+        pessoa.setNrCpf(usuarioDTO.pessoa().getNrCpf());
+
         usuario.setScUsuario(usuarioDTO.scUsuario());
         usuario.setScSenha(usuario.getScSenha());
-        usuario.getPessoa().setNmPessoa(usuarioDTO.pessoa().getNmPessoa());
-        usuario.getPessoa().setNrCpf(usuarioDTO.pessoa().getNrCpf());
+        usuario.setPessoa(pessoa);  
         return usuario;
     }
 }
