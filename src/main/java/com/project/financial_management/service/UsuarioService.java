@@ -7,11 +7,13 @@ import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -50,4 +52,23 @@ public class UsuarioService {
         return pessoa;
     }
 
+    public UsuarioDTO update(UUID idUsuario, UsuarioDTO usuarioDTO) {
+        return this.usuarioRepository.findById(idUsuario)
+            .map(usuario -> {
+                Usuario usuarioAtualizado = populateUsuario(usuario, usuarioDTO);
+                this.usuarioRepository.save(usuarioAtualizado);
+                return usuarioDTO;
+            }).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
+
+    private Usuario populateUsuario(Usuario usuario, UsuarioDTO usuarioDTO) {
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNmPessoa(usuarioDTO.pessoa().getNmPessoa());
+        pessoa.setNrCpf(usuarioDTO.pessoa().getNrCpf());
+
+        usuario.setScUsuario(usuarioDTO.scUsuario());
+        usuario.setScSenha(usuario.getScSenha());
+        usuario.setPessoa(pessoa);  
+        return usuario;
+    }
 }
