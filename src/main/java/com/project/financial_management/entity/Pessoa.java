@@ -9,13 +9,13 @@ public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID idPessoa;
+    private UUID idPessoa;
 
     @Column
-    String nmPessoa;
+    private String nmPessoa;
 
     @Column
-    String nrCpf;
+    private String nrCpf;
 
     public UUID getIdPessoa() {
         return idPessoa;
