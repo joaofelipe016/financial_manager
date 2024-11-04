@@ -9,10 +9,10 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long idRole;
+    private Long idRole;
 
     @Column
-    String nmRole;
+    private String nmRole;
 
     public Long getIdRole() {
         return idRole;

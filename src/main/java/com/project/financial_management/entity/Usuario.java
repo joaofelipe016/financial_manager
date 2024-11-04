@@ -11,17 +11,17 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID idUsuario;
+    private UUID idUsuario;
 
     @Column
-    String scUsuario;
+    private String scUsuario;
 
     @Column
-    String scSenha;
+    private String scSenha;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pessoa_id", referencedColumnName = "idPessoa")
-    Pessoa pessoa;
+    private Pessoa pessoa;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
