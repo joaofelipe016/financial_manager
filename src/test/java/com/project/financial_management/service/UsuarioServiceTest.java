@@ -1,10 +1,12 @@
 package com.project.financial_management.service;
 
 import com.project.financial_management.dto.UsuarioDTO;
+import com.project.financial_management.entity.Carteira;
 import com.project.financial_management.entity.Pessoa;
 import com.project.financial_management.entity.Role;
 import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
+import com.project.financial_management.repository.CarteiraRepository;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,6 +31,9 @@ class UsuarioServiceTest {
 
     @Mock
     private RoleRepository roleRepository;
+
+    @Mock
+    private CarteiraRepository carteiraRepository;
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;

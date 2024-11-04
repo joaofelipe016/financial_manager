@@ -1,10 +1,12 @@
 package com.project.financial_management.service;
 
 import com.project.financial_management.dto.UsuarioDTO;
+import com.project.financial_management.entity.Carteira;
 import com.project.financial_management.entity.Pessoa;
 import com.project.financial_management.entity.Role;
 import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
+import com.project.financial_management.repository.CarteiraRepository;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,11 +21,13 @@ import java.util.UUID;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final CarteiraRepository carteiraRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, CarteiraRepository carteiraRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.carteiraRepository = carteiraRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,6 +36,9 @@ public class UsuarioService {
         Pessoa pessoa = buildPessoa(usuarioDTO);
         Usuario usuario = buildUsuario(usuarioDTO, pessoa);
         this.usuarioRepository.save(usuario);
+        Carteira carteira = new Carteira();
+        carteira.setUsuario(usuario);
+        this.carteiraRepository.save(carteira);
         return usuarioDTO;
     }
 
