@@ -2,8 +2,10 @@ package com.project.financial_management.controller;
 
 import com.project.financial_management.dto.LoginRequest;
 import com.project.financial_management.dto.LoginResponse;
+import com.project.financial_management.interfacesService.InterfLoginService;
 import com.project.financial_management.repository.UsuarioRepository;
 import com.project.financial_management.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -16,11 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final LoginService loginService;
-
-    public LoginController(LoginService loginService) {
-        this.loginService = loginService;
-    }
+    @Autowired
+    private InterfLoginService loginService;
 
     @PostMapping("")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {

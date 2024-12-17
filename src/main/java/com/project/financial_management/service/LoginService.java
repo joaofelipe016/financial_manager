@@ -4,6 +4,7 @@ import com.project.financial_management.dto.LoginRequest;
 import com.project.financial_management.dto.LoginResponse;
 import com.project.financial_management.entity.Role;
 import com.project.financial_management.entity.Usuario;
+import com.project.financial_management.interfacesService.InterfLoginService;
 import com.project.financial_management.repository.UsuarioRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +17,7 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 @Service
-public class LoginService {
+public class LoginService implements InterfLoginService {
 
     private final JwtEncoder jwtEncoder;
     private final UsuarioRepository usuarioRepository;
@@ -28,6 +29,7 @@ public class LoginService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public LoginResponse login(LoginRequest loginRequest) throws Exception {
         var usuario = this.usuarioRepository.findByScUsuario(loginRequest.scUsuario());
 
