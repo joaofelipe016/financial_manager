@@ -6,6 +6,7 @@ import com.project.financial_management.entity.Pessoa;
 import com.project.financial_management.entity.Role;
 import com.project.financial_management.entity.Usuario;
 import com.project.financial_management.enums.Roles;
+import com.project.financial_management.interfacesService.InterfUsuarioService;
 import com.project.financial_management.repository.CarteiraRepository;
 import com.project.financial_management.repository.RoleRepository;
 import com.project.financial_management.repository.UsuarioRepository;
@@ -18,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements InterfUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final CarteiraRepository carteiraRepository;
@@ -32,6 +33,7 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public UsuarioDTO create(UsuarioDTO usuarioDTO) {
         Pessoa pessoa = buildPessoa(usuarioDTO);
         Usuario usuario = buildUsuario(usuarioDTO, pessoa);
@@ -59,6 +61,7 @@ public class UsuarioService {
         return pessoa;
     }
 
+    @Override
     public UsuarioDTO update(UUID idUsuario, UsuarioDTO usuarioDTO) {
         return this.usuarioRepository.findById(idUsuario)
             .map(usuario -> {
